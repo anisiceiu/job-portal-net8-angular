@@ -1,0 +1,44 @@
+<main>
+    <div class="flex justify-center">
+        <input *ngIf="showSearchBox"
+            class="w-full max-w-lg px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 my-4"
+            type="text" placeholder="search jobs" />
+    </div>
+    @if (joblist().length) {
+    <div class="flex flex-wrap mx-auto max-w-7xl gap-2 py-4">
+        @if(limit>0){
+        @for (item of joblist().slice(0, limit); track item.jobId)
+        {
+        <div class="bg-gray-300 w-[350px] p-4 mx-4 rounded">
+            <h6>{{item.jobType}}</h6>
+            <h2 class="text-green-600 text-2xl">{{item.jobTitle}}</h2>
+            <p>{{item.jobDescription}}</p>
+            <p class="text-green-600">{{item.salary}} / Year</p>
+            <p>Boston, MA</p>
+            <a [routerLink]="['/job',item.jobId]"
+                class="cursor-pointer shadow p-2 bg-green-600 text-white rounded inline-block ">Read More</a>
+        </div>
+        }
+        }
+        @else
+        {
+        @for (item of joblist(); track item.jobId)
+        {
+        <div class="bg-gray-300 w-[350px] p-4 mx-4 rounded">
+            <h6>{{item.jobType}}</h6>
+            <h2 class="text-green-600 text-2xl">{{item.jobTitle}}</h2>
+            <p>{{item.jobDescription}}</p>
+            <p class="text-green-600">{{item.salary}} / Year</p>
+            <p>Boston, MA</p>
+            <a [routerLink]="['/job',item.jobId]"
+                class="cursor-pointer shadow p-2 bg-green-600 text-white rounded inline-block ">Read More</a>
+        </div>
+        }
+        }
+    </div>
+    }
+    @else
+    {
+    <p>No jobs found or loading...</p>
+    }
+</main>

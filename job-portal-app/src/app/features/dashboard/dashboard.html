@@ -1,0 +1,89 @@
+<app-header/>
+<header class="page-header">
+    <div class="container">
+      <h1 class="fw-bold">Dashboard</h1>
+      <p class="text-secondary mb-0">Track hiring activity, applications, and posted roles.</p>
+    </div>
+  </header>
+  <main class="py-5">
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="stat-card p-4"><span class="small-label">Applications</span>
+            <h2 class="fw-bold">128</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card p-4"><span class="small-label">Interviews</span>
+            <h2 class="fw-bold">24</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card p-4"><span class="small-label">Saved Jobs</span>
+            <h2 class="fw-bold">16</h2>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card p-4"><span class="small-label">Open Roles</span>
+            <h2 class="fw-bold">9</h2>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4">
+        <section class="col-lg-8">
+          <div class="filter-box p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="fw-bold mb-0">Recent Applications</h4><a href="jobs.html">Browse jobs</a>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead>
+                  <tr>
+                    <th>Role</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Frontend Engineer</td>
+                    <td>Nimbus Labs</td>
+                    <td><span class="badge text-bg-warning">Interview</span></td>
+                    <td>May 3, 2026</td>
+                  </tr>
+                  <tr>
+                    <td>Product Manager</td>
+                    <td>Atlas Cloud</td>
+                    <td><span class="badge text-bg-info">Review</span></td>
+                    <td>May 1, 2026</td>
+                  </tr>
+                  <tr>
+                    <td>Growth Marketer</td>
+                    <td>BrightHire</td>
+                    <td><span class="badge text-bg-success">Shortlisted</span></td>
+                    <td>Apr 28, 2026</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <aside class="col-lg-4">
+          <div class="filter-box p-4">
+            <h4 class="fw-bold">Activity</h4>
+            <div class="timeline-item"><strong>Interview scheduled</strong>
+              <p class="text-secondary mb-0">Nimbus Labs, Thursday at 2:00 PM.</p>
+            </div>
+            <div class="timeline-item"><strong>New applicant</strong>
+              <p class="text-secondary mb-0">3 candidates applied to UX Designer.</p>
+            </div>
+            <div class="timeline-item"><strong>Job expiring soon</strong>
+              <p class="text-secondary mb-0">Renew Product Analyst by May 7.</p>
+            </div><a class="btn btn-primary w-100 mt-2" routerLink="/add-job">Create Listing</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+<app-footer/>

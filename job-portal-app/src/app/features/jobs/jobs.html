@@ -1,0 +1,87 @@
+<app-header/>
+<main class="py-5">
+    <div class="container">
+      <form class="search-panel mb-4">
+        <div class="row g-2">
+          <div class="col-lg"><input class="form-control form-control-lg" placeholder="Title, skill, or company"></div>
+          <div class="col-lg"><input class="form-control form-control-lg" placeholder="City or remote"></div>
+          <div class="col-lg-auto"><button class="btn btn-primary btn-lg"><i class="bi bi-search me-1"></i>Find Jobs</button></div>
+        </div>
+      </form>
+      <div class="row g-4">
+        <aside class="col-lg-3">
+          <div class="filter-box p-4 sticky-lg-top" style="top: 92px;">
+            <h5 class="fw-bold">Filters</h5>
+            <label class="form-label mt-3">Category</label>
+            <select class="form-select"><option>All categories</option><option>Technology</option><option>Marketing</option><option>Finance</option></select>
+            <label class="form-label mt-3">Job type</label>
+            <div class="vstack gap-2">
+              <label><input class="form-check-input me-2" type="checkbox">Full-time</label>
+              <label><input class="form-check-input me-2" type="checkbox">Part-time</label>
+              <label><input class="form-check-input me-2" type="checkbox">Contract</label>
+              <label><input class="form-check-input me-2" type="checkbox">Remote</label>
+            </div>
+            <label class="form-label mt-3">Experience</label>
+            <select class="form-select"><option>Any level</option><option>Entry</option><option>Mid</option><option>Senior</option></select>
+            <button class="btn btn-outline-primary w-100 mt-4" type="button">Apply Filters</button>
+          </div>
+        </aside>
+        <section class="col-lg-9">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="text-secondary mb-0">Showing 248 jobs</p>
+            <select class="form-select w-auto"><option>Newest</option><option>Salary</option><option>Company</option></select>
+          </div>
+
+          <div class="vstack gap-3">
+            <article class="card job-card">
+              <div class="card-body">
+                <div class="d-flex gap-3">
+                  <div class="logo-box bg-primary-subtle text-primary"><i class="bi bi-code-slash"></i></div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between gap-3">
+                      <div><h5><a href="job-detail.html">Senior Frontend Engineer</a></h5><p class="text-secondary mb-2">Nimbus Labs</p></div>
+                      <button class="btn btn-outline-secondary btn-sm align-self-start" data-save-job type="button"><i class="bi bi-bookmark"></i></button>
+                    </div>
+                    <p>Ship reusable UI, improve performance, and collaborate with product teams on analytics workflows.</p>
+                    <div class="job-meta"><span><i class="bi bi-geo-alt"></i> Remote USA</span><span><i class="bi bi-briefcase"></i> Full-time</span><span><i class="bi bi-cash"></i> $120k - $155k</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="card job-card">
+              <div class="card-body">
+                <div class="d-flex gap-3">
+                  <div class="logo-box bg-warning-subtle text-warning"><i class="bi bi-megaphone"></i></div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between gap-3">
+                      <div><h5><a href="job-detail.html">Growth Marketing Manager</a></h5><p class="text-secondary mb-2">BrightHire</p></div>
+                      <button class="btn btn-outline-secondary btn-sm align-self-start" data-save-job type="button"><i class="bi bi-bookmark"></i></button>
+                    </div>
+                    <p>Own acquisition strategy, lifecycle campaigns, and reporting for a B2B recruiting platform.</p>
+                    <div class="job-meta"><span><i class="bi bi-geo-alt"></i> New York, NY</span><span><i class="bi bi-briefcase"></i> Hybrid</span><span><i class="bi bi-cash"></i> $95k - $125k</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="card job-card">
+              <div class="card-body">
+                <div class="d-flex gap-3">
+                  <div class="logo-box bg-info-subtle text-info"><i class="bi bi-kanban"></i></div>
+                  <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between gap-3">
+                      <div><h5><a href="job-detail.html">Product Manager</a></h5><p class="text-secondary mb-2">Atlas Cloud</p></div>
+                      <button class="btn btn-outline-secondary btn-sm align-self-start" data-save-job type="button"><i class="bi bi-bookmark"></i></button>
+                    </div>
+                    <p>Lead roadmap planning, customer interviews, and feature releases for enterprise teams.</p>
+                    <div class="job-meta"><span><i class="bi bi-geo-alt"></i> Seattle, WA</span><span><i class="bi bi-briefcase"></i> Contract</span><span><i class="bi bi-cash"></i> $70/hr</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <app-footer/>

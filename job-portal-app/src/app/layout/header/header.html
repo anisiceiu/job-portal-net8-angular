@@ -1,0 +1,19 @@
+ <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top border-bottom">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-briefcase-fill text-primary me-2"></i>JobPortal</a>
+      <button class="navbar-toggler" type="button" (click)="isOpen = !isOpen"><span class="navbar-toggler-icon"></span></button>
+      <div [class.collapse]="isOpen" class="navbar-collapse">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link active" routerLinkActive="active" routerLink="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/jobs">Jobs</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/companies">Companies</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/candidates">Candidates</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/dashboard">Dashboard</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-primary" routerLink="/login">Login</a>
+          <a class="btn btn-primary" routerLink="/add-job">Post Job</a>
+        </div>
+      </div>
+    </div>
+  </nav>

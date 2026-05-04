@@ -1,0 +1,56 @@
+<app-header/>
+<header class="page-header">
+    <div class="container">
+      <h1 class="fw-bold">Post a Job</h1>
+      <p class="text-secondary mb-0">Create a polished listing for candidates to discover and apply.</p>
+    </div>
+  </header>
+  <main class="py-5">
+    <div class="container">
+      <div class="row g-4">
+        <section class="col-lg-8">
+          <form class="filter-box p-4">
+            <h4 class="fw-bold">Job Details</h4>
+            <div class="row g-3 mt-1">
+              <div class="col-md-8"><label class="form-label">Job title</label><input class="form-control"
+                  placeholder="Senior Frontend Engineer"></div>
+              <div class="col-md-4"><label class="form-label">Job type</label><select class="form-select">
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Contract</option>
+                  <option>Internship</option>
+                </select></div>
+              <div class="col-md-6"><label class="form-label">Company</label><input class="form-control"
+                  placeholder="Company name"></div>
+              <div class="col-md-6"><label class="form-label">Location</label><input class="form-control"
+                  placeholder="Remote, city, or country"></div>
+              <div class="col-md-6"><label class="form-label">Salary range</label><input class="form-control"
+                  placeholder="$90k - $120k"></div>
+              <div class="col-md-6"><label class="form-label">Application deadline</label><input class="form-control"
+                  type="date"></div>
+              <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" rows="6"
+                  placeholder="Describe the role, responsibilities, and team."></textarea></div>
+              <div class="col-12"><label class="form-label">Skills</label><input class="form-control"
+                  placeholder="React, Bootstrap, APIs"></div>
+              <div class="col-12"><button class="btn btn-primary btn-lg">Publish Job</button></div>
+            </div>
+          </form>
+        </section>
+        <aside class="col-lg-4">
+          <div class="filter-box p-4">
+            <h5>Posting checklist</h5>
+            <div class="timeline-item"><strong>Write a clear title</strong>
+              <p class="text-secondary mb-0">Use the role candidates search for.</p>
+            </div>
+            <div class="timeline-item"><strong>Add transparent pay</strong>
+              <p class="text-secondary mb-0">Salary clarity increases applications.</p>
+            </div>
+            <div class="timeline-item"><strong>List must-have skills</strong>
+              <p class="text-secondary mb-0">Keep requirements realistic and focused.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <app-footer/>
