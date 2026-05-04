@@ -10,21 +10,87 @@
           <div class="auth-card p-4 p-md-5">
             <h1 class="h3 fw-bold">Create your account</h1>
             <p class="text-secondary">Join as a candidate or employer and start using the portal.</p>
-            <form class="row g-3">
-              <div class="col-md-6"><label class="form-label">Full name</label><input
-                  class="form-control form-control-lg"></div>
-              <div class="col-md-6"><label class="form-label">Account type</label><select
-                  class="form-select form-select-lg">
-                  <option>Candidate</option>
-                  <option>Employer</option>
-                </select></div>
-              <div class="col-md-6"><label class="form-label">Email</label><input class="form-control form-control-lg"
-                  type="email"></div>
-              <div class="col-md-6"><label class="form-label">Password</label><input
-                  class="form-control form-control-lg" type="password"></div>
-              <div class="col-12"><label><input class="form-check-input me-2" type="checkbox">I agree to the terms and
-                  privacy policy</label></div>
-              <div class="col-12"><button class="btn btn-primary btn-lg w-100">Create Account</button></div>
+            <form class="row g-3" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              @if (serverError) {
+                <div class="col-12">
+                  <div class="alert alert-danger mb-0">{{ serverError }}</div>
+                </div>
+              }
+
+              <div class="col-md-6">
+                <label class="form-label" for="fullName">Full name</label>
+                <input
+                  class="form-control form-control-lg"
+                  id="fullName"
+                  formControlName="fullName"
+                  [class.is-invalid]="fullName.invalid && (fullName.dirty || fullName.touched)"
+                >
+                @if (fullName.invalid && (fullName.dirty || fullName.touched)) {
+                  <div class="invalid-feedback">Full name is required.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="role">Account type</label>
+                <select
+                  class="form-select form-select-lg"
+                  id="role"
+                  formControlName="role"
+                  [class.is-invalid]="role.invalid && (role.dirty || role.touched)"
+                >
+                  <option value="Candidate">Candidate</option>
+                  <option value="Employer">Employer</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="registerEmail">Email</label>
+                <input
+                  class="form-control form-control-lg"
+                  id="registerEmail"
+                  type="email"
+                  formControlName="email"
+                  [class.is-invalid]="email.invalid && (email.dirty || email.touched)"
+                >
+                @if (email.invalid && (email.dirty || email.touched)) {
+                  <div class="invalid-feedback">Enter a valid email address.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="registerPassword">Password</label>
+                <input
+                  class="form-control form-control-lg"
+                  id="registerPassword"
+                  type="password"
+                  formControlName="password"
+                  [class.is-invalid]="password.invalid && (password.dirty || password.touched)"
+                >
+                @if (password.invalid && (password.dirty || password.touched)) {
+                  <div class="invalid-feedback">Password must be at least 6 characters.</div>
+                }
+              </div>
+
+              <div class="col-12">
+                <label>
+                  <input
+                    class="form-check-input me-2"
+                    type="checkbox"
+                    formControlName="acceptTerms"
+                    [class.is-invalid]="acceptTerms.invalid && (acceptTerms.dirty || acceptTerms.touched)"
+                  >
+                  I agree to the terms and privacy policy
+                </label>
+                @if (acceptTerms.invalid && (acceptTerms.dirty || acceptTerms.touched)) {
+                  <div class="text-danger small mt-1">You must accept the terms to continue.</div>
+                }
+              </div>
+
+              <div class="col-12">
+                <button class="btn btn-primary btn-lg w-100" type="submit" [disabled]="isSubmitting">
+                  {{ isSubmitting ? 'Creating account...' : 'Create Account' }}
+                </button>
+              </div>
             </form>
             <hr>
             <p class="mb-0 text-center">Already registered? <a routerLink="/login">Login</a></p>

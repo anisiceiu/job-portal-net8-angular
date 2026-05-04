@@ -50,7 +50,17 @@ namespace JobPortalApi.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(null, new { id = user.UserId }, new { user.UserId, user.FullName, user.Email, user.Role });
+            //return CreatedAtAction(null, new { id = user.UserId }, new { user.UserId, user.FullName, user.Email, user.Role });
+            var token = GenerateJwtToken(user);
+            var response = new AuthResponseDto
+            {
+                Token = token,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = user.Role
+            };
+
+            return Ok(response);
         }
 
         [HttpPost("login")]

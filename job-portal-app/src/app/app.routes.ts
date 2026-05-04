@@ -9,18 +9,19 @@ import { Candidates } from './features/candidates/candidates';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Login } from './features/login/login';
 import { Register } from './features/register/register';
+import { authGuard } from './core/auth/auth.guard';
 
 
 export const routes: Routes = [
     {path:'',component:Home},
     {path:'home',component:Home},
     {path:'jobs',component:Jobs},
-    {path:'add-job',component:PostJob},
-    {path:'companies',component:Companines},
-    {path:'candidates',component:Candidates},
-    {path:'dashboard',component:Dashboard},
+    {path:'add-job',component:PostJob, canActivate: [authGuard]},
+    {path:'companies',component:Companines, canActivate: [authGuard]},
+    {path:'candidates',component:Candidates, canActivate: [authGuard]},
+    {path:'dashboard',component:Dashboard, canActivate: [authGuard]},
     {path:'login',component:Login},
     {path:'register',component:Register},
-    {path:'job/:id',component:JobDetails},
+    {path:'job/:id',component:JobDetails, canActivate: [authGuard]},
     {path:'**',component:NotFound}
 ];

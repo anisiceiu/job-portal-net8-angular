@@ -6,6 +6,16 @@
   --jp-border: #e6eaf2;
 }
 
+.toast-container {
+  position: fixed;
+  bottom: 20px;      
+  right: 20px;  
+  z-index: 1000;     
+  display: flex;
+  flex-direction: column;
+  gap: 10px;         
+}
+
 body {
   color: var(--jp-ink);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
