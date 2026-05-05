@@ -6,6 +6,9 @@ import { AuthResponse, AuthUser, JwtPayload, LoginRequest, RegisterRequest } fro
 
 const TOKEN_KEY = 'job_portal_access_token';
 const REFRESH_TOKEN_KEY = 'job_portal_refresh_token';
+const ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+const NAME_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name';
+const EMAIL_CLAIM = 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -31,12 +34,12 @@ export class AuthService {
       return null;
     }
 
-    const role = Array.isArray(payload.role) ? payload.role[0] : payload.role;
+    const role = this.getFirstClaimValue(payload.role ?? payload[ROLE_CLAIM]);
 
     return {
-      id: payload.sub,
-      email: payload.email ?? '',
-      fullName: payload.name ?? payload.unique_name,
+      id: this.getClaimValue(payload.sub),
+      email: this.getClaimValue(payload.email ?? payload[EMAIL_CLAIM]) ?? '',
+      fullName: this.getClaimValue(payload['fullName'] ?? payload.name ?? payload.unique_name ?? payload[NAME_CLAIM]),
       role,
     };
   });
@@ -96,7 +99,11 @@ export class AuthService {
   private decodeToken(token: string): JwtPayload | null {
     try {
       const payload = token.split('.')[1];
-      const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      if (!payload) {
+        return null;
+      }
+
+      const normalizedPayload = this.padBase64(payload.replace(/-/g, '+').replace(/_/g, '/'));
       const decoded = atob(normalizedPayload);
       const json = decodeURIComponent(
         decoded
@@ -109,5 +116,22 @@ export class AuthService {
     } catch {
       return null;
     }
+  }
+
+  private getFirstClaimValue(value: unknown): string | undefined {
+    if (Array.isArray(value)) {
+      return this.getClaimValue(value[0]);
+    }
+
+    return this.getClaimValue(value);
+  }
+
+  private getClaimValue(value: unknown): string | undefined {
+    return typeof value === 'string' && value ? value : undefined;
+  }
+
+  private padBase64(value: string): string {
+    const paddingLength = (4 - (value.length % 4)) % 4;
+    return `${value}${'='.repeat(paddingLength)}`;
   }
 }
