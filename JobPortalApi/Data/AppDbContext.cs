@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Company> Companies { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<JobCategory> JobCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,10 +22,29 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Job>(entity =>
         {
             entity.HasKey(e => e.JobId);
-            entity.Property(e => e.JobTitle).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.JobType).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.JobDescription).IsRequired();
-            entity.Property(e => e.Salary).HasPrecision(18, 2);
+
+            entity.Property(e => e.Title).IsRequired().HasMaxLength(180);
+            entity.Property(e => e.JobType).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.WorkMode).HasMaxLength(50);
+            entity.Property(e => e.Location).HasMaxLength(150);
+
+            entity.Property(e => e.SalaryMin).HasPrecision(12, 2);
+            entity.Property(e => e.SalaryMax).HasPrecision(12, 2);
+
+            entity.Property(e => e.Description).IsRequired();
+            entity.Property(e => e.Responsibilities);
+            entity.Property(e => e.Requirements);
+            entity.Property(e => e.Benefits);
+
+            entity.Property(e => e.Deadline);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(30).HasDefaultValue("Open");
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSDATETIME()");
+            entity.Property(e => e.UpdatedAt);
+
+            entity.HasCheckConstraint("CK_Jobs_JobType", "JobType IN ('Full-time', 'Part-time', 'Contract', 'Internship', 'Remote')");
+            entity.HasCheckConstraint("CK_Jobs_WorkMode", "WorkMode IN ('On-site', 'Hybrid', 'Remote')");
+            entity.HasCheckConstraint("CK_Jobs_Status", "Status IN ('Draft', 'Open', 'Closed', 'Paused')");
 
             // Relationship with Company
             entity.HasOne(e => e.Company)
@@ -52,10 +72,15 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Company>(entity =>
         {
             entity.HasKey(e => e.CompanyId);
-            entity.Property(e => e.CompanyName).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.CompanyDescription).IsRequired();
-            entity.Property(e => e.CompanyEmail).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.CompanyContactPhone).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.CompanyName).IsRequired().HasMaxLength(180);
+            entity.Property(e => e.Industry).HasMaxLength(100);
+            entity.Property(e => e.Website).HasMaxLength(255);
+            entity.Property(e => e.LogoUrl).HasMaxLength(500);
+            entity.Property(e => e.Description);
+            entity.Property(e => e.Address).HasMaxLength(300);
+            entity.Property(e => e.City).HasMaxLength(100);
+            entity.Property(e => e.Country).HasMaxLength(100);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSDATETIME()");
         });
 
         // Seed some initial data
@@ -64,17 +89,27 @@ public class AppDbContext : DbContext
             {
                 CompanyId = 1,
                 CompanyName = "Tech Solutions Inc.",
-                CompanyDescription = "A leading technology company specializing in software development.",
-                CompanyEmail = "info@techsolutions.com",
-                CompanyContactPhone = "+1-555-0100"
+                Industry = "Software",
+                Website = "https://www.techsolutions.com",
+                LogoUrl = "https://www.techsolutions.com/logo.png",
+                Description = "A leading technology company specializing in software development.",
+                Address = "123 Tech Drive",
+                City = "Seattle",
+                Country = "USA",
+                CreatedAt = DateTime.UtcNow
             },
             new Company
             {
                 CompanyId = 2,
                 CompanyName = "Digital Innovations LLC",
-                CompanyDescription = "Innovative digital solutions for modern businesses.",
-                CompanyEmail = "contact@digitalinnovations.com",
-                CompanyContactPhone = "+1-555-0200"
+                Industry = "Digital Services",
+                Website = "https://www.digitalinnovations.com",
+                LogoUrl = "https://www.digitalinnovations.com/logo.png",
+                Description = "Innovative digital solutions for modern businesses.",
+                Address = "456 Innovation Way",
+                City = "Austin",
+                Country = "USA",
+                CreatedAt = DateTime.UtcNow
             }
         );
 
@@ -83,19 +118,23 @@ public class AppDbContext : DbContext
             {
                 JobId = 1,
                 JobType = "Full-time",
-                JobTitle = "Senior Software Developer",
-                JobDescription = "We are looking for an experienced software developer to join our team.",
-                Salary = 95000.00m,
-                CompanyId = 1
+                Title = "Senior Software Developer",
+                Description = "We are looking for an experienced software developer to join our team.",
+                SalaryMin = 90000.00m,
+                SalaryMax = 110000.00m,
+                CompanyId = 1,
+                PostedByUserId = 1
             },
             new Job
             {
                 JobId = 2,
                 JobType = "Part-time",
-                JobTitle = "UI/UX Designer",
-                JobDescription = "Creative designer needed for web and mobile applications.",
-                Salary = 45000.00m,
-                CompanyId = 2
+                Title = "UI/UX Designer",
+                Description = "Creative designer needed for web and mobile applications.",
+                SalaryMin = 40000.00m,
+                SalaryMax = 50000.00m,
+                CompanyId = 2,
+                PostedByUserId = 1
             }
         );
     }

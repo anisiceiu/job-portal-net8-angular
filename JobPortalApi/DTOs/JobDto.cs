@@ -7,75 +7,86 @@ namespace JobPortalApi.DTOs;
 /// </summary>
 public class CreateJobDto
 {
-    /// <summary>
-    /// Type of job (e.g., Full-time, Part-time, Contract)
-    /// </summary>
-    [Required]
-    [StringLength(100)]
-    public string JobType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job title
-    /// </summary>
-    [Required]
-    [StringLength(200)]
-    public string JobTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job description
-    /// </summary>
-    [Required]
-    public string JobDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Salary amount
-    /// </summary>
-    [Required]
-    [Range(0, double.MaxValue)]
-    public decimal Salary { get; set; }
-
-    /// <summary>
-    /// ID of the company offering the job
-    /// </summary>
     [Required]
     public int CompanyId { get; set; }
+
+    [Required]
+    public int PostedByUserId { get; set; }
+
+    public int? CategoryId { get; set; }
+
+    [Required]
+    [StringLength(180)]
+    public string Title { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(50)]
+    public string JobType { get; set; } = string.Empty; // Full-time, Part-time, Contract, Internship, Remote
+
+    [StringLength(50)]
+    public string? WorkMode { get; set; } // On-site, Hybrid, Remote
+
+    [StringLength(150)]
+    public string? Location { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal? SalaryMin { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal? SalaryMax { get; set; }
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+
+    public string? Responsibilities { get; set; }
+    public string? Requirements { get; set; }
+    public string? Benefits { get; set; }
+
+    public DateTime? Deadline { get; set; }
+
+    [StringLength(30)]
+    public string Status { get; set; } = "Open"; // Draft, Open, Closed, Paused
 }
 
-/// <summary>
-/// Data transfer object for updating an existing job
-/// </summary>
 public class UpdateJobDto
 {
-    /// <summary>
-    /// Type of job (e.g., Full-time, Part-time, Contract)
-    /// </summary>
-    [Required]
-    [StringLength(100)]
-    public string JobType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job title
-    /// </summary>
-    [Required]
-    [StringLength(200)]
-    public string JobTitle { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Job description
-    /// </summary>
-    [Required]
-    public string JobDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Salary amount
-    /// </summary>
-    [Required]
-    [Range(0, double.MaxValue)]
-    public decimal Salary { get; set; }
-
-    /// <summary>
-    /// ID of the company offering the job
-    /// </summary>
     [Required]
     public int CompanyId { get; set; }
+
+    [Required]
+    public int PostedByUserId { get; set; }
+
+    public int? CategoryId { get; set; }
+
+    [Required]
+    [StringLength(180)]
+    public string Title { get; set; } = string.Empty;
+
+    [Required]
+    [StringLength(50)]
+    public string JobType { get; set; } = string.Empty;
+
+    [StringLength(50)]
+    public string? WorkMode { get; set; }
+
+    [StringLength(150)]
+    public string? Location { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal? SalaryMin { get; set; }
+
+    [Range(0, double.MaxValue)]
+    public decimal? SalaryMax { get; set; }
+
+    [Required]
+    public string Description { get; set; } = string.Empty;
+
+    public string? Responsibilities { get; set; }
+    public string? Requirements { get; set; }
+    public string? Benefits { get; set; }
+
+    public DateTime? Deadline { get; set; }
+
+    [StringLength(30)]
+    public string Status { get; set; } = "Open";
 }

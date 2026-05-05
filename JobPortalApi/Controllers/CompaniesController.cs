@@ -50,8 +50,21 @@ public class CompaniesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Company), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Company>> CreateCompany(Company company)
+    public async Task<ActionResult<Company>> CreateCompany([FromBody] DTOs.CreateCompanyDto dto)
     {
+        var company = new Company
+        {
+            CompanyName = dto.CompanyName,
+            Industry = dto.Industry,
+            Website = dto.Website,
+            LogoUrl = dto.LogoUrl,
+            Description = dto.Description,
+            Address = dto.Address,
+            City = dto.City,
+            Country = dto.Country,
+            CreatedAt = DateTime.UtcNow
+        };
+
         _context.Companies.Add(company);
         await _context.SaveChangesAsync();
 
@@ -65,9 +78,9 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateCompany(int id, Company company)
+    public async Task<IActionResult> UpdateCompany(int id, [FromBody] DTOs.UpdateCompanyDto dto)
     {
-        if (id != company.CompanyId)
+        if (id != dto.CompanyId)
         {
             return BadRequest(new { message = "Company ID mismatch." });
         }
@@ -79,10 +92,14 @@ public class CompaniesController : ControllerBase
         }
 
         // Update properties
-        existingCompany.CompanyName = company.CompanyName;
-        existingCompany.CompanyDescription = company.CompanyDescription;
-        existingCompany.CompanyEmail = company.CompanyEmail;
-        existingCompany.CompanyContactPhone = company.CompanyContactPhone;
+        existingCompany.CompanyName = dto.CompanyName;
+        existingCompany.Industry = dto.Industry;
+        existingCompany.Website = dto.Website;
+        existingCompany.LogoUrl = dto.LogoUrl;
+        existingCompany.Description = dto.Description;
+        existingCompany.Address = dto.Address;
+        existingCompany.City = dto.City;
+        existingCompany.Country = dto.Country;
 
         await _context.SaveChangesAsync();
 

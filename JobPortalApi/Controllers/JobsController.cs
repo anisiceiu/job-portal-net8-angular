@@ -66,11 +66,21 @@ public class JobsController : ControllerBase
 
         var job = new Job
         {
-            JobType = jobDto.JobType,
-            JobTitle = jobDto.JobTitle,
-            JobDescription = jobDto.JobDescription,
-            Salary = jobDto.Salary,
             CompanyId = jobDto.CompanyId,
+            PostedByUserId = jobDto.PostedByUserId,
+            CategoryId = jobDto.CategoryId,
+            Title = jobDto.Title,
+            JobType = jobDto.JobType,
+            WorkMode = jobDto.WorkMode,
+            Location = jobDto.Location,
+            SalaryMin = jobDto.SalaryMin,
+            SalaryMax = jobDto.SalaryMax,
+            Description = jobDto.Description,
+            Responsibilities = jobDto.Responsibilities,
+            Requirements = jobDto.Requirements,
+            Benefits = jobDto.Benefits,
+            Deadline = jobDto.Deadline,
+            Status = jobDto.Status,
             Company = company
         };
 
@@ -103,11 +113,22 @@ public class JobsController : ControllerBase
         }
 
         // Update properties
-        existingJob.JobType = jobDto.JobType;
-        existingJob.JobTitle = jobDto.JobTitle;
-        existingJob.JobDescription = jobDto.JobDescription;
-        existingJob.Salary = jobDto.Salary;
         existingJob.CompanyId = jobDto.CompanyId;
+        existingJob.PostedByUserId = jobDto.PostedByUserId;
+        existingJob.CategoryId = jobDto.CategoryId;
+        existingJob.Title = jobDto.Title;
+        existingJob.JobType = jobDto.JobType;
+        existingJob.WorkMode = jobDto.WorkMode;
+        existingJob.Location = jobDto.Location;
+        existingJob.SalaryMin = jobDto.SalaryMin;
+        existingJob.SalaryMax = jobDto.SalaryMax;
+        existingJob.Description = jobDto.Description;
+        existingJob.Responsibilities = jobDto.Responsibilities;
+        existingJob.Requirements = jobDto.Requirements;
+        existingJob.Benefits = jobDto.Benefits;
+        existingJob.Deadline = jobDto.Deadline;
+        existingJob.Status = jobDto.Status;
+        existingJob.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
@@ -145,7 +166,7 @@ public class JobsController : ControllerBase
 
         if (!string.IsNullOrEmpty(title))
         {
-            query = query.Where(j => j.JobTitle.Contains(title));
+            query = query.Where(j => j.Title.Contains(title));
         }
 
         if (!string.IsNullOrEmpty(type))

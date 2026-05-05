@@ -9,30 +9,101 @@
     <div class="container">
       <div class="row g-4">
         <section class="col-lg-8">
-          <form class="filter-box p-4">
+          <form class="filter-box p-4" [formGroup]="jobForm" (ngSubmit)="onSubmit()">
             <h4 class="fw-bold">Job Details</h4>
+            @if (serverError) {
+              <div class="alert alert-danger mt-3 mb-0">{{ serverError }}</div>
+            }
             <div class="row g-3 mt-1">
-              <div class="col-md-8"><label class="form-label">Job title</label><input class="form-control"
-                  placeholder="Senior Frontend Engineer"></div>
-              <div class="col-md-4"><label class="form-label">Job type</label><select class="form-select">
-                  <option>Full-time</option>
-                  <option>Part-time</option>
-                  <option>Contract</option>
-                  <option>Internship</option>
+              <div class="col-md-8"><label class="form-label" for="title">Job title</label><input class="form-control"
+                  id="title" formControlName="title" placeholder="Senior Frontend Engineer"
+                  [class.is-invalid]="title.invalid && (title.dirty || title.touched)">
+                @if (title.invalid && (title.dirty || title.touched)) {
+                  <div class="invalid-feedback">Job title is required.</div>
+                }
+              </div>
+              <div class="col-md-4"><label class="form-label" for="jobType">Job Category</label><select class="form-select"
+                  id="jobType" formControlName="categoryId">
+                   @for (category of categories; track category.categoryId) {
+                    <option [ngValue]="category.categoryId">{{ category.categoryName }}</option>
+                  }
                 </select></div>
-              <div class="col-md-6"><label class="form-label">Company</label><input class="form-control"
-                  placeholder="Company name"></div>
-              <div class="col-md-6"><label class="form-label">Location</label><input class="form-control"
-                  placeholder="Remote, city, or country"></div>
-              <div class="col-md-6"><label class="form-label">Salary range</label><input class="form-control"
-                  placeholder="$90k - $120k"></div>
-              <div class="col-md-6"><label class="form-label">Application deadline</label><input class="form-control"
-                  type="date"></div>
-              <div class="col-12"><label class="form-label">Description</label><textarea class="form-control" rows="6"
-                  placeholder="Describe the role, responsibilities, and team."></textarea></div>
-              <div class="col-12"><label class="form-label">Skills</label><input class="form-control"
-                  placeholder="React, Bootstrap, APIs"></div>
-              <div class="col-12"><button class="btn btn-primary btn-lg">Publish Job</button></div>
+              <div class="col-md-4"><label class="form-label" for="jobType">Job type</label><select class="form-select"
+                  id="jobType" formControlName="jobType">
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Internship">Internship</option>
+                  <option value="Remote">Remote</option>
+                </select></div>
+              <div class="col-md-6"><label class="form-label" for="companyId">Company</label><select class="form-select"
+                  id="companyId" formControlName="companyId"
+                  [class.is-invalid]="companyId.invalid && (companyId.dirty || companyId.touched)"
+                  [disabled]="isLoadingCompanies">
+                  <option [ngValue]="0">Select company</option>
+                  @for (company of companies; track company.companyId) {
+                    <option [ngValue]="company.companyId">{{ company.companyName }}</option>
+                  }
+                </select>
+                @if (companyId.invalid && (companyId.dirty || companyId.touched)) {
+                  <div class="invalid-feedback">Company is required.</div>
+                }
+              </div>
+              <div class="col-md-6"><label class="form-label" for="workMode">Work mode</label><select class="form-select"
+                  id="workMode" formControlName="workMode">
+                  <option value="On-site">On-site</option>
+                  <option value="Hybrid">Hybrid</option>
+                  <option value="Remote">Remote</option>
+                </select></div>
+              <div class="col-md-6"><label class="form-label" for="location">Location</label><input class="form-control"
+                  id="location" formControlName="location" placeholder="Remote, city, or country"
+                  [class.is-invalid]="location.invalid && (location.dirty || location.touched)">
+                @if (location.invalid && (location.dirty || location.touched)) {
+                  <div class="invalid-feedback">Location must be 150 characters or fewer.</div>
+                }
+              </div>
+              <div class="col-md-6"><label class="form-label" for="salaryMin">Minimum salary</label><input class="form-control"
+                  id="salaryMin" formControlName="salaryMin" type="number" min="0" step="0.01" placeholder="90000"
+                  [class.is-invalid]="salaryMin.invalid && (salaryMin.dirty || salaryMin.touched)">
+                @if (salaryMin.invalid && (salaryMin.dirty || salaryMin.touched)) {
+                  <div class="invalid-feedback">Minimum salary must be zero or greater.</div>
+                }
+              </div>
+              <div class="col-md-6"><label class="form-label" for="salaryMax">Maximum salary</label><input class="form-control"
+                  id="salaryMax" formControlName="salaryMax" type="number" min="0" step="0.01" placeholder="120000"
+                  [class.is-invalid]="salaryMax.invalid && (salaryMax.dirty || salaryMax.touched)">
+                @if (salaryMax.invalid && (salaryMax.dirty || salaryMax.touched)) {
+                  <div class="invalid-feedback">Maximum salary must be zero or greater.</div>
+                }
+              </div>
+              <div class="col-md-6"><label class="form-label" for="deadline">Application deadline</label><input class="form-control"
+                  id="deadline" formControlName="deadline" type="date"></div>
+              <div class="col-md-6"><label class="form-label" for="status">Status</label><select class="form-select"
+                  id="status" formControlName="status">
+                  <option value="Open">Open</option>
+                  <option value="Draft">Draft</option>
+                  <option value="Paused">Paused</option>
+                  <option value="Closed">Closed</option>
+                </select></div>
+              <div class="col-12"><label class="form-label" for="description">Description</label><textarea class="form-control" rows="5"
+                  id="description" formControlName="description" placeholder="Describe the role, responsibilities, and team."
+                  [class.is-invalid]="description.invalid && (description.dirty || description.touched)"></textarea>
+                @if (description.invalid && (description.dirty || description.touched)) {
+                  <div class="invalid-feedback">Description is required.</div>
+                }
+              </div>
+              <div class="col-12"><label class="form-label" for="responsibilities">Responsibilities</label><textarea class="form-control"
+                  id="responsibilities" formControlName="responsibilities" rows="3"
+                  placeholder="List the main responsibilities for this role."></textarea></div>
+              <div class="col-12"><label class="form-label" for="requirements">Requirements</label><textarea class="form-control"
+                  id="requirements" formControlName="requirements" rows="3"
+                  placeholder="List experience, skills, and qualifications."></textarea></div>
+              <div class="col-12"><label class="form-label" for="benefits">Benefits</label><textarea class="form-control"
+                  id="benefits" formControlName="benefits" rows="3"
+                  placeholder="Mention benefits, perks, and compensation notes."></textarea></div>
+              <div class="col-12"><button class="btn btn-primary btn-lg" type="submit" [disabled]="isSubmitting">
+                {{ isSubmitting ? 'Publishing...' : 'Publish Job' }}
+              </button></div>
             </div>
           </form>
         </section>
