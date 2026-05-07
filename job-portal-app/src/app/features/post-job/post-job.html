@@ -23,7 +23,7 @@
                 }
               </div>
               <div class="col-md-4"><label class="form-label" for="jobType">Job Category</label><select class="form-select"
-                  id="jobType" formControlName="categoryId">
+                  id="categoryId" formControlName="categoryId">
                    @for (category of categories; track category.categoryId) {
                     <option [ngValue]="category.categoryId">{{ category.categoryName }}</option>
                   }

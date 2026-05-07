@@ -162,3 +162,287 @@ VALUES
 ('Marketing'),
 ('UX Design'),
 ('Project Management');
+
+
+INSERT INTO Companies
+(
+    CompanyName,
+    Description,
+    Website,
+    Address,
+    Industry,
+    CreatedAt
+)
+VALUES
+(
+    'TechNova Solutions',
+    'Software development and cloud solutions company.',
+    'https://technova.com',
+    'Dhaka, Bangladesh',
+    'Software',
+    SYSDATETIME()
+),
+
+(
+    'NextGen Systems',
+    'Modern web and mobile application development company.',
+    'https://nextgensystems.com',
+    'Rajshahi, Bangladesh',
+    'Technology',
+    SYSDATETIME()
+),
+
+(
+    'CodeCraft Ltd',
+    'Custom enterprise software solutions provider.',
+    'https://codecraftbd.com',
+    'Chittagong, Bangladesh',
+    'Software',
+    SYSDATETIME()
+),
+
+(
+    'PixelForge Studio',
+    'Creative UI/UX and branding agency.',
+    'https://pixelforge.com',
+    'Dhaka, Bangladesh',
+    'Design',
+    SYSDATETIME()
+),
+
+(
+    'SecureNet Technologies',
+    'Cyber security and infrastructure solutions company.',
+    'https://securenet.com',
+    'Sylhet, Bangladesh',
+    'Cyber Security',
+    SYSDATETIME()
+),
+
+(
+    'SmartSoft Technologies',
+    'Enterprise business software provider.',
+    'https://smartsoft.com',
+    'Dhaka, Bangladesh',
+    'Software',
+    SYSDATETIME()
+),
+
+(
+    'AI Vision Labs',
+    'Artificial intelligence and machine learning startup.',
+    'https://aivisionlabs.com',
+    'Remote',
+    'Artificial Intelligence',
+    SYSDATETIME()
+),
+
+(
+    'CloudEdge Solutions',
+    'Cloud infrastructure and DevOps consultancy.',
+    'https://cloudedge.io',
+    'Dhaka, Bangladesh',
+    'Cloud Computing',
+    SYSDATETIME()
+),
+
+(
+    'AgileWorks Ltd',
+    'Agile software project management company.',
+    'https://agileworks.com',
+    'Rajshahi, Bangladesh',
+    'IT Services',
+    SYSDATETIME()
+),
+
+(
+    'CreativeHub Agency',
+    'Digital marketing and graphic design agency.',
+    'https://creativehub.com',
+    'Dhaka, Bangladesh',
+    'Marketing',
+    SYSDATETIME()
+);
+
+
+
+
+
+INSERT INTO Jobs
+(
+    CompanyId,
+    PostedByUserId,
+    CategoryId,
+    Title,
+    JobType,
+    WorkMode,
+    Location,
+    SalaryMin,
+    SalaryMax,
+    Description,
+    Responsibilities,
+    Requirements,
+    Benefits,
+    Deadline,
+    Status
+)
+VALUES
+(1, 1, 1, 'Frontend Developer', 'Full-time', 'Hybrid', 'Dhaka, Bangladesh',
+50000, 80000,
+'Develop modern Angular applications.',
+'Build UI components and integrate APIs.',
+'Angular, TypeScript, HTML, CSS.',
+'Health insurance, yearly bonus.',
+'2026-06-30', 'Open'),
+
+(1, 2, 1, 'Backend Developer', 'Full-time', 'On-site', 'Dhaka, Bangladesh',
+60000, 100000,
+'Develop REST APIs using ASP.NET Core.',
+'Database design and API development.',
+'C#, ASP.NET Core, SQL Server.',
+'Lunch facility, bonus.',
+'2026-06-28', 'Open'),
+
+(2, 2, 2, 'Full Stack Developer', 'Full-time', 'Remote', 'Remote',
+70000, 120000,
+'Work on frontend and backend systems.',
+'Build scalable applications.',
+'React, Node.js, MSSQL.',
+'Remote allowance.',
+'2026-07-10', 'Open'),
+
+(2, 2, 2, 'UI UX Designer', 'Part-time', 'Hybrid', 'Rajshahi, Bangladesh',
+30000, 50000,
+'Design user-friendly interfaces.',
+'Create wireframes and prototypes.',
+'Figma, Adobe XD.',
+'Flexible hours.',
+'2026-06-20', 'Open'),
+
+(3, 2, 3, 'QA Engineer', 'Full-time', 'On-site', 'Chittagong, Bangladesh',
+40000, 70000,
+'Test software applications.',
+'Manual and automated testing.',
+'Selenium, Postman.',
+'Medical support.',
+'2026-06-25', 'Open'),
+
+(3, 2, 3, 'DevOps Engineer', 'Full-time', 'Remote', 'Remote',
+80000, 140000,
+'Maintain CI/CD pipelines.',
+'Cloud deployment and monitoring.',
+'Docker, Kubernetes, Azure.',
+'Remote work support.',
+'2026-07-05', 'Open'),
+
+(4, 2, 4, 'Mobile App Developer', 'Contract', 'Hybrid', 'Dhaka, Bangladesh',
+60000, 90000,
+'Develop mobile applications.',
+'Build Android and iOS apps.',
+'Flutter or React Native.',
+'Performance bonus.',
+'2026-07-01', 'Open'),
+
+(4, 2, 4, 'Data Analyst', 'Full-time', 'On-site', 'Khulna, Bangladesh',
+50000, 85000,
+'Analyze business data.',
+'Prepare dashboards and reports.',
+'SQL, Power BI, Excel.',
+'Yearly increment.',
+'2026-06-29', 'Open'),
+
+(5, 2, 5, 'Cyber Security Specialist', 'Full-time', 'Remote', 'Remote',
+90000, 150000,
+'Protect systems from cyber threats.',
+'Conduct security audits.',
+'Network security, SIEM.',
+'Remote allowance.',
+'2026-07-15', 'Open'),
+
+(5, 2, 5, 'Technical Support Engineer', 'Part-time', 'On-site', 'Sylhet, Bangladesh',
+25000, 40000,
+'Provide technical support.',
+'Troubleshoot client issues.',
+'Networking and OS knowledge.',
+'Flexible schedule.',
+'2026-06-18', 'Open'),
+
+(6, 2, 6, 'Software Engineer', 'Full-time', 'Hybrid', 'Dhaka, Bangladesh',
+70000, 110000,
+'Develop enterprise software.',
+'Implement business features.',
+'JavaScript, .NET.',
+'Festival bonus.',
+'2026-07-08', 'Open'),
+
+(6, 2, 6, 'Database Administrator', 'Full-time', 'On-site', 'Dhaka, Bangladesh',
+75000, 120000,
+'Manage SQL databases.',
+'Optimize database performance.',
+'SQL Server, Backup, Tuning.',
+'Insurance coverage.',
+'2026-07-03', 'Open'),
+
+(7, 2, 7, 'Machine Learning Engineer', 'Full-time', 'Remote', 'Remote',
+100000, 180000,
+'Build ML models.',
+'Train and deploy AI solutions.',
+'Python, TensorFlow.',
+'Learning budget.',
+'2026-07-20', 'Open'),
+
+(7, 2, 7, 'Content Writer', 'Part-time', 'Remote', 'Remote',
+20000, 35000,
+'Write technical articles.',
+'Create blog and SEO content.',
+'Excellent English writing.',
+'Flexible timing.',
+'2026-06-22', 'Open'),
+
+(8, 2, 6, 'Business Analyst', 'Full-time', 'Hybrid', 'Dhaka, Bangladesh',
+55000, 95000,
+'Gather business requirements.',
+'Coordinate with stakeholders.',
+'Communication and documentation.',
+'Bonus and leave benefits.',
+'2026-07-12', 'Open'),
+
+(8, 2, 5, 'Cloud Engineer', 'Full-time', 'Remote', 'Remote',
+85000, 145000,
+'Manage cloud infrastructure.',
+'Deploy scalable services.',
+'AWS, Azure, Terraform.',
+'Certification support.',
+'2026-07-18', 'Open'),
+
+(9, 2, 4, 'Project Manager', 'Full-time', 'Hybrid', 'Dhaka, Bangladesh',
+95000, 160000,
+'Lead software projects.',
+'Manage teams and timelines.',
+'Agile, Scrum.',
+'Performance incentives.',
+'2026-07-25', 'Open'),
+
+(9, 2, 3, 'HR Executive', 'Full-time', 'On-site', 'Rajshahi, Bangladesh',
+30000, 50000,
+'Handle recruitment tasks.',
+'Manage employee records.',
+'Communication and HR skills.',
+'Festival bonus.',
+'2026-06-24', 'Open'),
+
+(10, 2, 2, 'Graphic Designer', 'Contract', 'Remote', 'Remote',
+35000, 60000,
+'Design marketing materials.',
+'Create social media graphics.',
+'Photoshop, Illustrator.',
+'Flexible work.',
+'2026-06-27', 'Open'),
+
+(10, 2, 1, 'System Administrator', 'Full-time', 'On-site', 'Dhaka, Bangladesh',
+65000, 105000,
+'Maintain IT systems.',
+'Server monitoring and troubleshooting.',
+'Windows Server, Linux.',
+'Health insurance.',
+'2026-07-06', 'Open');

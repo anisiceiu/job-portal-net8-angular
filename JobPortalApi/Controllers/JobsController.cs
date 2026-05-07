@@ -159,21 +159,69 @@ public class JobsController : ControllerBase
     /// Searches jobs by title or type
     /// </summary>
     [HttpGet("search")]
-    [ProducesResponseType(typeof(IEnumerable<Job>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<Job>>> SearchJobs([FromQuery] string? title, [FromQuery] string? type)
+    [ProducesResponseType(typeof(PaginatedResult<Job>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PaginatedResult<Job>>> SearchJobs( [FromQuery] string? type, [FromQuery] int? categoryId, [FromQuery] string? workmode, [FromQuery] string? experience)
     {
         var query = _context.Jobs.Include(j => j.Company).AsQueryable();
 
-        if (!string.IsNullOrEmpty(title))
+        if (!string.IsNullOrEmpty(workmode))
         {
-            query = query.Where(j => j.Title.Contains(title));
+            query = query.Where(j => j.WorkMode!.Contains(workmode));
         }
 
         if (!string.IsNullOrEmpty(type))
         {
-            query = query.Where(j => j.JobType.Contains(type));
+            query = query.Where(j => type.ToLower().Contains(j.JobType.ToLower()));
         }
 
-        return await query.ToListAsync();
+        if (categoryId.HasValue)
+        {
+            query = query.Where(j => j.CategoryId == categoryId.Value);
+        }
+
+        var totalJobs = await query.CountAsync();
+        var jobs = await query.AsNoTracking()
+            .Include(j => j.Company)
+            .OrderByDescending(j => j.JobId)
+            .Skip(0 * 10)
+            .Take(10)
+            .ToListAsync();
+
+        var result = new PaginatedResult<Job>
+        {
+            Items = jobs,
+            TotalCount = totalJobs,
+            Page = 1,
+            PageSize = 10
+        };
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Gets paginated jobs with company information
+    /// </summary>
+    [HttpGet("paginated")]
+    [ProducesResponseType(typeof(PaginatedResult<Job>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PaginatedResult<Job>>> GetJobsPaginated([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var totalJobs = await _context.Jobs.CountAsync();
+        var jobs = await _context.Jobs
+             .AsNoTracking()
+            .Include(j => j.Company)
+            .OrderByDescending(j => j.JobId)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var result = new PaginatedResult<Job>
+        {
+            Items = jobs,
+            TotalCount = totalJobs,
+            Page = page,
+            PageSize = pageSize
+        };
+
+        return Ok(result);
     }
 }
