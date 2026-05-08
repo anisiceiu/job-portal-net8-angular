@@ -14,11 +14,12 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   token?: string;
-  refreshToken:string;
-  accessToken:string;
+  refreshToken?: string;
+  accessToken?: string;
   fullName?: string;
   email: string;
   role?: UserRole | string;
+  candidateProfileId?: number;
 }
 
 export interface AuthUser {
@@ -26,6 +27,7 @@ export interface AuthUser {
   fullName?: string;
   email: string;
   role?: UserRole | string;
+  candidateProfileId: number;
 }
 
 export interface JwtPayload {

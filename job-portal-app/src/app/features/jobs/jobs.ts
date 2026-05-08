@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { finalize } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../core/services/toast.service';
+import { RouterLink } from "@angular/router";
 
 interface Category {
   categoryId: number;
@@ -16,7 +17,7 @@ interface Category {
 
 @Component({
   selector: 'app-jobs',
-  imports: [Header, Footer, ɵInternalFormsSharedModule,ReactiveFormsModule],
+  imports: [Header, Footer, ɵInternalFormsSharedModule, ReactiveFormsModule, RouterLink],
   templateUrl: './jobs.html',
   styleUrl: './jobs.css',
 })

@@ -12,6 +12,7 @@ import { Register } from './features/register/register';
 import { authGuard } from './core/auth/auth.guard';
 import { roleGuard } from './core/auth/role.guard';
 import { Unauthorized } from './unauthorized/unauthorized';
+import { CandidateProfileComponent } from './features/candidate-profile/candidate-profile';
 
 
 export const routes: Routes = [
@@ -27,7 +28,17 @@ export const routes: Routes = [
     {path:'candidates',
      component:Candidates,
      canActivate: [authGuard,roleGuard],
-     data: { roles: ['Employer', 'Admin'] }
+     data: { roles: ['Candidate', 'Employer', 'Admin'] }
+    },
+    {path:'candidate-profile',
+     component:CandidateProfileComponent,
+     canActivate: [authGuard,roleGuard],
+     data: { roles: ['Candidate', 'Admin'] }
+    },
+    {path:'candidate-profile/:id',
+     component:CandidateProfileComponent,
+     canActivate: [authGuard,roleGuard],
+     data: { roles: ['Candidate', 'Admin'] }
     },
     {path:'dashboard',component:Dashboard, canActivate: [authGuard]},
     {path:'login',component:Login},

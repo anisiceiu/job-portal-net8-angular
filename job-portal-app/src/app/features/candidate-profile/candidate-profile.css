@@ -1,0 +1,7 @@
+.filter-box {
+  border-radius: 8px;
+}
+
+textarea {
+  resize: vertical;
+}

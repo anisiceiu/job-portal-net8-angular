@@ -1,77 +1,225 @@
-<app-header/>
-<header class="page-header">
-    <div class="container"><a href="jobs.html" class="text-secondary"><i class="bi bi-arrow-left me-1"></i>Back to
-        jobs</a>
-      <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
-        <div class="logo-box bg-primary-subtle text-primary"><i class="bi bi-code-slash"></i></div>
-        <div>
-          <h1 class="fw-bold mb-1">Senior Frontend Engineer</h1>
-          <p class="text-secondary mb-0">Nimbus Labs - Remote USA - Full-time</p>
-        </div>
-      </div>
-    </div>
-  </header>
-  <main class="py-5">
-    <div class="container">
-      <div class="row g-4">
-        <section class="col-lg-8">
-          <div class="card job-card">
-            <div class="card-body p-4">
-              <h4>Job Description</h4>
-              <p>Nimbus Labs is looking for a senior frontend engineer to craft reliable, accessible product experiences
-                for hiring teams. You will work closely with design, backend, and product leadership to build
-                dashboards, candidate workflows, and reusable UI systems.</p>
-              <h5 class="mt-4">Responsibilities</h5>
-              <ul>
-                <li>Build responsive interfaces with semantic HTML, Bootstrap, and component-driven patterns.</li>
-                <li>Own performance, accessibility, and browser compatibility for core user journeys.</li>
-                <li>Collaborate with designers and product managers to ship measurable improvements.</li>
-                <li>Review code and mentor engineers on frontend quality.</li>
-              </ul>
-              <h5 class="mt-4">Requirements</h5>
-              <ul>
-                <li>5+ years of production frontend experience.</li>
-                <li>Strong JavaScript, API integration, and CSS architecture skills.</li>
-                <li>Experience with dashboards, SaaS tools, or workflow-heavy applications.</li>
-              </ul>
-              <h5 class="mt-4">Benefits</h5>
-              <p>Remote-first culture, health coverage, learning budget, flexible PTO, and quarterly team retreats.</p>
-            </div>
-          </div>
-        </section>
-        <aside class="col-lg-4">
-          <div class="filter-box p-4 mb-4"><a class="btn btn-primary btn-lg w-100 mb-2" href="#apply">Apply
-              Now</a><button class="btn btn-outline-secondary w-100" data-save-job type="button"><i
-                class="bi bi-bookmark"></i></button>
-            <hr>
-            <div class="vstack gap-3">
-              <div><span class="small-label">Salary</span><strong class="d-block">$120k - $155k</strong></div>
-              <div><span class="small-label">Experience</span><strong class="d-block">Senior level</strong></div>
-              <div><span class="small-label">Deadline</span><strong class="d-block">May 31, 2026</strong></div>
-            </div>
-          </div>
-          <div class="filter-box p-4">
-            <h5>About Nimbus Labs</h5>
-            <p class="text-secondary">A workflow software company helping modern teams hire with speed and fairness.</p>
-            <a href="companies.html">View company profile</a>
-          </div>
-        </aside>
-      </div>
-      <section id="apply" class="mt-5">
-        <div class="filter-box p-4">
-          <h3 class="fw-bold">Apply for this role</h3>
-          <div class="row g-3 mt-1">
-            <div class="col-md-6"><input class="form-control" placeholder="Full name"></div>
-            <div class="col-md-6"><input class="form-control" placeholder="Email address"></div>
-            <div class="col-md-6"><input class="form-control" placeholder="Portfolio or LinkedIn"></div>
-            <div class="col-md-6"><input class="form-control" type="file"></div>
-            <div class="col-12"><textarea class="form-control" rows="5" placeholder="Short cover letter"></textarea>
-            </div>
-            <div class="col-12"><button class="btn btn-primary">Submit Application</button></div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </main>
+<app-header />
 
-  <app-footer/>
+@if (error) {
+  <div class="container py-5">
+    <div class="alert alert-danger">{{ error }}</div>
+  </div>
+} @else {
+
+  @if (loading()) {
+    <div class="container py-5">
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3">Loading job details...</p>
+      </div>
+    </div>
+  } @else {
+
+    <main class="py-5">
+      <div class="container">
+        <div class="row g-4">
+
+          <section class="col-lg-8">
+            <div class="card job-card">
+              <div class="card-body p-4">
+
+                <h4>Job Description</h4>
+                <p>{{ job()?.description }}</p>
+
+                <h5 class="mt-4">Responsibilities</h5>
+                @if (job()?.responsibilities) {
+                  <ul>
+                    @for (responsibility of job()?.responsibilities?.split('\n'); track responsibility) {
+                      <li>{{ responsibility }}</li>
+                    }
+                  </ul>
+                }
+
+                <h5 class="mt-4">Requirements</h5>
+                @if (job()?.requirements) {
+                  <ul>
+                    @for (requirement of job()?.requirements?.split('\n'); track requirement) {
+                      <li>{{ requirement }}</li>
+                    }
+                  </ul>
+                }
+
+                <h5 class="mt-4">Benefits</h5>
+                <p>{{ job()?.benefits }}</p>
+
+              </div>
+            </div>
+          </section>
+
+          <aside class="col-lg-4">
+
+            <div class="filter-box p-4 mb-4">
+              <button class="btn btn-primary btn-lg w-100 mb-2" type="button" (click)="scrollToApply()">
+                Apply Now
+              </button>
+
+              <button class="btn btn-outline-secondary w-100" data-save-job type="button">
+                <i class="bi bi-bookmark"></i>
+              </button>
+
+              <hr>
+
+              <div class="vstack gap-3">
+
+                <div>
+                  <span class="small-label">Salary</span>
+
+                  <strong class="d-block">
+                    {{
+                      job()?.salaryMin && job()?.salaryMax
+                        ? '$' + job()?.salaryMin + 'k - $' + job()?.salaryMax + 'k'
+                        : job()?.salaryMin
+                          ? '$' + job()?.salaryMin + 'k+'
+                          : job()?.salaryMax
+                            ? 'Up to $' + job()?.salaryMax + 'k'
+                            : 'Not specified'
+                    }}
+                  </strong>
+                </div>
+
+                <div>
+                  <span class="small-label">Experience</span>
+                  <strong class="d-block">{{ job()?.jobType }}</strong>
+                </div>
+
+                <div>
+                  <span class="small-label">Deadline</span>
+                  <strong class="d-block">
+                    {{
+                      job()?.deadline
+                        ? (job()?.deadline | date : 'MMM d, yyyy')
+                        : 'Not specified'
+                    }}
+                  </strong>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="filter-box p-4">
+              <h5>About {{ job()?.company?.companyName }}</h5>
+
+              <p class="text-secondary">
+                {{ job()?.company?.companyName }}
+                - A workflow software company helping modern teams hire with speed and fairness.
+              </p>
+
+              <a href="companies.html">View company profile</a>
+            </div>
+
+          </aside>
+
+        </div>
+
+        <section id="apply" class="mt-5" #applySection>
+
+          <form class="filter-box p-4" [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
+
+            <h3 class="fw-bold">Apply for this role</h3>
+
+            @if (applicationError) {
+              <div class="alert alert-danger mt-3 mb-0">{{ applicationError }}</div>
+            }
+
+            @if (applicationSuccess) {
+              <div class="alert alert-success mt-3 mb-0">{{ applicationSuccess }}</div>
+            }
+
+            <div class="row g-3 mt-1">
+
+              <div class="col-md-6">
+                <label class="form-label" for="fullName">Full name</label>
+                <input
+                  class="form-control"
+                  id="fullName"
+                  formControlName="fullName"
+                  placeholder="Full name"
+                  [class.is-invalid]="fullName.invalid && (fullName.dirty || fullName.touched)">
+                @if (fullName.invalid && (fullName.dirty || fullName.touched)) {
+                  <div class="invalid-feedback">Full name is required.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="email">Email address</label>
+                <input
+                  class="form-control"
+                  id="email"
+                  type="email"
+                  formControlName="email"
+                  placeholder="Email address"
+                  [class.is-invalid]="email.invalid && (email.dirty || email.touched)">
+                @if (email.invalid && (email.dirty || email.touched)) {
+                  <div class="invalid-feedback">Enter a valid email address.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="portfolioUrl">Portfolio or LinkedIn</label>
+                <input
+                  class="form-control"
+                  id="portfolioUrl"
+                  formControlName="portfolioUrl"
+                  placeholder="Portfolio or LinkedIn"
+                  [class.is-invalid]="portfolioUrl.invalid && (portfolioUrl.dirty || portfolioUrl.touched)">
+                @if (portfolioUrl.invalid && (portfolioUrl.dirty || portfolioUrl.touched)) {
+                  <div class="invalid-feedback">Portfolio link must be 255 characters or fewer.</div>
+                }
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label" for="resumeFile">Resume</label>
+                <input
+                  class="form-control"
+                  id="resumeFile"
+                  #resumeInput
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  (change)="onResumeSelected($event)">
+                @if (resumeFile()) {
+                  <div class="form-text">{{ resumeFile()?.name }}</div>
+                }
+              </div>
+
+              <div class="col-12">
+                <label class="form-label" for="coverLetter">Short cover letter</label>
+                <textarea
+                  class="form-control"
+                  id="coverLetter"
+                  formControlName="coverLetter"
+                  rows="5"
+                  placeholder="Short cover letter"
+                  [class.is-invalid]="coverLetter.invalid && (coverLetter.dirty || coverLetter.touched)">
+                </textarea>
+                @if (coverLetter.invalid && (coverLetter.dirty || coverLetter.touched)) {
+                  <div class="invalid-feedback">Cover letter must be 4000 characters or fewer.</div>
+                }
+              </div>
+
+              <div class="col-12">
+                <button class="btn btn-primary" type="submit" [disabled]="submitting()">
+                  {{ submitting() ? 'Submitting...' : 'Submit Application' }}
+                </button>
+              </div>
+
+            </div>
+
+          </form>
+
+        </section>
+
+      </div>
+    </main>
+
+  }
+
+}
+
+<app-footer />

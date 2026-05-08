@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<Company> Companies { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<JobCategory> JobCategories { get; set; }
+    public DbSet<Application> Applications { get; set; }
+    public DbSet<CandidateProfile> CandidateProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -81,6 +83,48 @@ public class AppDbContext : DbContext
             entity.Property(e => e.City).HasMaxLength(100);
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("SYSDATETIME()");
+        });
+
+        // Configure Application entity
+        modelBuilder.Entity<Application>(entity =>
+        {
+            entity.HasKey(e => e.ApplicationId);
+            entity.Property(e => e.CandidateProfileId).IsRequired();
+            entity.Property(e => e.CoverLetter);
+            entity.Property(e => e.ResumeUrl).HasMaxLength(500);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(40).HasDefaultValue("Submitted");
+            entity.Property(e => e.AppliedAt).HasDefaultValueSql("SYSDATETIME()");
+
+            entity.HasCheckConstraint("CK_Applications_Status", "Status IN ('Submitted', 'Review', 'Shortlisted', 'Interview', 'Rejected', 'Hired')");
+
+            entity.HasOne(e => e.Job)
+                  .WithMany()
+                  .HasForeignKey(e => e.JobId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure CandidateProfile entity
+        modelBuilder.Entity<CandidateProfile>(entity =>
+        {
+            entity.HasKey(e => e.CandidateProfileId);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.Headline).HasMaxLength(200);
+            entity.Property(e => e.Summary);
+            entity.Property(e => e.ExperienceYears).HasPrecision(4, 1);
+            entity.Property(e => e.CurrentSalary).HasPrecision(12, 2);
+            entity.Property(e => e.ExpectedSalary).HasPrecision(12, 2);
+            entity.Property(e => e.Location).HasMaxLength(150);
+            entity.Property(e => e.PortfolioUrl).HasMaxLength(255);
+            entity.Property(e => e.LinkedInUrl).HasMaxLength(255);
+            entity.Property(e => e.GitHubUrl).HasMaxLength(255);
+            entity.Property(e => e.ResumeUrl).HasMaxLength(500);
+
+            entity.HasIndex(e => e.UserId).IsUnique();
+
+            entity.HasOne(e => e.User)
+                  .WithMany()
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // Seed some initial data

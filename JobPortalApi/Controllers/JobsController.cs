@@ -18,6 +18,72 @@ public class JobsController : ControllerBase
     }
 
     /// <summary>
+    /// Place an application for a job
+    /// </summary>
+    [HttpPost("applications")]
+    [ProducesResponseType(typeof(Application), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<Application>> PlaceApplication([FromForm] CreateApplicationDto dto)
+    {
+        // Validate job exists
+        var job = await _context.Jobs.FindAsync(dto.JobId);
+
+        if (job == null)
+        {
+            return BadRequest(new
+            {
+                message = $"Job with ID {dto.JobId} does not exist."
+            });
+        }
+
+        string? resumePath = null;
+
+        // Save uploaded resume file
+        if (dto.ResumeFile != null && dto.ResumeFile.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "resumes");
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName =
+                $"{Guid.NewGuid()}_{dto.ResumeFile.FileName}";
+
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await dto.ResumeFile.CopyToAsync(stream);
+            }
+
+            resumePath = $"/resumes/{uniqueFileName}";
+        }
+
+        var application = new Application
+        {
+            JobId = dto.JobId,
+            CandidateProfileId = dto.CandidateProfileId,
+            CoverLetter = dto.CoverLetter,
+            ResumeUrl = resumePath,
+            Status = "Submitted",
+            AppliedAt = DateTime.UtcNow
+        };
+
+        _context.Applications.Add(application);
+
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(
+            null,
+            new { id = application.ApplicationId },
+            application
+        );
+    }
+
+    /// <summary>
     /// Gets all jobs with company information
     /// </summary>
     [HttpGet]

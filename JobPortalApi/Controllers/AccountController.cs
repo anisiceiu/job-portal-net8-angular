@@ -51,13 +51,20 @@ namespace JobPortalApi.Controllers
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction(null, new { id = user.UserId }, new { user.UserId, user.FullName, user.Email, user.Role });
-            var token = GenerateJwtToken(user);
+            var candidateProfileId = user.Role == "Candidate"
+                ? await _context.CandidateProfiles
+                    .Where(cp => cp.UserId == user.UserId)
+                    .Select(cp => cp.CandidateProfileId)
+                    .FirstOrDefaultAsync()
+                : 0;
+            var token = GenerateJwtToken(user, candidateProfileId);
             var response = new AuthResponseDto
             {
                 Token = token,
                 FullName = user.FullName,
                 Email = user.Email,
-                Role = user.Role
+                Role = user.Role,
+                CandidateProfileId = candidateProfileId
             };
 
             return Ok(response);
@@ -76,19 +83,26 @@ namespace JobPortalApi.Controllers
             if (!PasswordHasher.VerifyPassword(user.PasswordHash, dto.Password))
                 return Unauthorized("Invalid credentials.");
 
-            var token = GenerateJwtToken(user);
+            var candidateProfileId = user.Role == "Candidate"
+                ? await _context.CandidateProfiles
+                    .Where(cp => cp.UserId == user.UserId)
+                    .Select(cp => cp.CandidateProfileId)
+                    .FirstOrDefaultAsync()
+                : 0;
+            var token = GenerateJwtToken(user, candidateProfileId);
             var response = new AuthResponseDto
             {
                 Token = token,
                 FullName = user.FullName,
                 Email = user.Email,
-                Role = user.Role
+                Role = user.Role,
+                CandidateProfileId = candidateProfileId
             };
 
             return Ok(response);
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user, int candidateProfileId)
         {
             var jwtSection = _config.GetSection("Jwt");
             var key = jwtSection.GetValue<string>("Key");
@@ -101,6 +115,7 @@ namespace JobPortalApi.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("fullName", user.FullName),
+                new Claim("candidateProfileId", candidateProfileId.ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 

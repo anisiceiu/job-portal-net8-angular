@@ -90,7 +90,7 @@
                 <div class="flex-grow-1">
                   <div class="d-flex justify-content-between gap-3">
                     <div>
-                      <h5><a href="job-detail.html">{{job.title}}</a></h5>
+                      <h5><a routerLink="/job/{{job.jobId}}">{{job.title}}</a></h5>
                       <p class="text-secondary mb-2">{{job.company?.companyName}}</p>
                     </div>
                     <button class="btn btn-outline-secondary btn-sm align-self-start" data-save-job type="button"><i

@@ -1,0 +1,196 @@
+<app-header />
+
+<header class="page-header">
+  <div class="container">
+    <h1 class="fw-bold">{{ isEditMode ? 'Update Candidate Profile' : 'Create Candidate Profile' }}</h1>
+    <p class="text-secondary mb-0">
+      Keep candidate details complete so employers can understand experience, availability, and links.
+    </p>
+  </div>
+</header>
+
+<main class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <section class="col-lg-8">
+        <form class="filter-box p-4" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <h4 class="fw-bold mb-1">Profile Details</h4>
+              <p class="text-secondary mb-0">Add professional summary, compensation, location, and public links.</p>
+            </div>
+            @if (isLoading) {
+              <span class="badge text-bg-light">Loading</span>
+            }
+          </div>
+
+          @if (serverError) {
+            <div class="alert alert-danger">{{ serverError }}</div>
+          }
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label" for="headline">Headline</label>
+              <input
+                class="form-control"
+                id="headline"
+                formControlName="headline"
+                placeholder="Frontend Engineer"
+                [class.is-invalid]="headline.invalid && (headline.dirty || headline.touched)">
+              @if (headline.invalid && (headline.dirty || headline.touched)) {
+                <div class="invalid-feedback">Headline must be 200 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="summary">Summary</label>
+              <textarea
+                class="form-control"
+                id="summary"
+                formControlName="summary"
+                rows="5"
+                placeholder="Briefly describe skills, experience, and preferred roles."></textarea>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="experienceYears">Experience years</label>
+              <input
+                class="form-control"
+                id="experienceYears"
+                formControlName="experienceYears"
+                type="number"
+                min="0"
+                max="99.9"
+                step="0.1"
+                [class.is-invalid]="experienceYears.invalid && (experienceYears.dirty || experienceYears.touched)">
+              @if (experienceYears.invalid && (experienceYears.dirty || experienceYears.touched)) {
+                <div class="invalid-feedback">Experience must be between 0 and 99.9 years.</div>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="currentSalary">Current salary</label>
+              <input
+                class="form-control"
+                id="currentSalary"
+                formControlName="currentSalary"
+                type="number"
+                min="0"
+                step="0.01"
+                [class.is-invalid]="currentSalary.invalid && (currentSalary.dirty || currentSalary.touched)">
+              @if (currentSalary.invalid && (currentSalary.dirty || currentSalary.touched)) {
+                <div class="invalid-feedback">Current salary must be zero or greater.</div>
+              }
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label" for="expectedSalary">Expected salary</label>
+              <input
+                class="form-control"
+                id="expectedSalary"
+                formControlName="expectedSalary"
+                type="number"
+                min="0"
+                step="0.01"
+                [class.is-invalid]="expectedSalary.invalid && (expectedSalary.dirty || expectedSalary.touched)">
+              @if (expectedSalary.invalid && (expectedSalary.dirty || expectedSalary.touched)) {
+                <div class="invalid-feedback">Expected salary must be zero or greater.</div>
+              }
+            </div>
+
+            <div class="col-12">
+              <label class="form-label" for="location">Location</label>
+              <input
+                class="form-control"
+                id="location"
+                formControlName="location"
+                placeholder="Dhaka, Bangladesh"
+                [class.is-invalid]="location.invalid && (location.dirty || location.touched)">
+              @if (location.invalid && (location.dirty || location.touched)) {
+                <div class="invalid-feedback">Location must be 150 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="portfolioUrl">Portfolio URL</label>
+              <input
+                class="form-control"
+                id="portfolioUrl"
+                formControlName="portfolioUrl"
+                placeholder="https://portfolio.example.com"
+                [class.is-invalid]="portfolioUrl.invalid && (portfolioUrl.dirty || portfolioUrl.touched)">
+              @if (portfolioUrl.invalid && (portfolioUrl.dirty || portfolioUrl.touched)) {
+                <div class="invalid-feedback">Portfolio URL must be 255 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="linkedInUrl">LinkedIn URL</label>
+              <input
+                class="form-control"
+                id="linkedInUrl"
+                formControlName="linkedInUrl"
+                placeholder="https://linkedin.com/in/username"
+                [class.is-invalid]="linkedInUrl.invalid && (linkedInUrl.dirty || linkedInUrl.touched)">
+              @if (linkedInUrl.invalid && (linkedInUrl.dirty || linkedInUrl.touched)) {
+                <div class="invalid-feedback">LinkedIn URL must be 255 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="gitHubUrl">GitHub URL</label>
+              <input
+                class="form-control"
+                id="gitHubUrl"
+                formControlName="gitHubUrl"
+                placeholder="https://github.com/username"
+                [class.is-invalid]="gitHubUrl.invalid && (gitHubUrl.dirty || gitHubUrl.touched)">
+              @if (gitHubUrl.invalid && (gitHubUrl.dirty || gitHubUrl.touched)) {
+                <div class="invalid-feedback">GitHub URL must be 255 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label" for="resumeUrl">Resume URL</label>
+              <input
+                class="form-control"
+                id="resumeUrl"
+                formControlName="resumeUrl"
+                placeholder="https://..."
+                [class.is-invalid]="resumeUrl.invalid && (resumeUrl.dirty || resumeUrl.touched)">
+              @if (resumeUrl.invalid && (resumeUrl.dirty || resumeUrl.touched)) {
+                <div class="invalid-feedback">Resume URL must be 500 characters or fewer.</div>
+              }
+            </div>
+
+            <div class="col-12">
+              <button class="btn btn-primary btn-lg" type="submit" [disabled]="isSubmitting || isLoading">
+                {{ isSubmitting ? 'Saving...' : isEditMode ? 'Update Profile' : 'Create Profile' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <aside class="col-lg-4">
+        <div class="filter-box p-4">
+          <h5 class="fw-bold">Profile Checklist</h5>
+          <div class="timeline-item">
+            <strong>Write a focused headline</strong>
+            <p class="text-secondary mb-0">Use the role or specialty employers search for.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>Add useful links</strong>
+            <p class="text-secondary mb-0">Portfolio, LinkedIn, GitHub, and resume links improve review speed.</p>
+          </div>
+          <div class="timeline-item">
+            <strong>Keep salary realistic</strong>
+            <p class="text-secondary mb-0">Clear expectations make shortlisting easier.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<app-footer />
