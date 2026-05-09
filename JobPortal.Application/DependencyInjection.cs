@@ -11,7 +11,8 @@ namespace JobPortal.Application
         {
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IJobCategoryService, JobCategoryService>();
-
+            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICandidateProfileService, CandidateProfileService>();
             return services;
         }
     }
