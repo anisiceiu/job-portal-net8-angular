@@ -1,8 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using JobPortalApi.Data;
-using JobPortalApi.DTOs;
-using JobPortalApi.Models;
-using JobPortalApi.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
