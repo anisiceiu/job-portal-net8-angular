@@ -10,6 +10,7 @@ namespace JobPortal.Application
             this IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IJobCategoryService, JobCategoryService>();
 
             return services;
         }

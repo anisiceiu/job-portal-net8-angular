@@ -1,7 +1,8 @@
+using JobPortal.Application.DTOs;
+using JobPortal.Application.Interfaces.Services;
+using JobPortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using JobPortalApi.Data;
-using JobPortalApi.Models;
 
 namespace JobPortalApi.Controllers;
 
@@ -9,11 +10,11 @@ namespace JobPortalApi.Controllers;
 [Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IJobCategoryService _service;
 
-    public CategoriesController(AppDbContext context)
+    public CategoriesController(IJobCategoryService service)
     {
-        _context = context;
+        _service = service;
     }
 
     /// <summary>
@@ -23,7 +24,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<JobCategory>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<JobCategory>>> GetCompanies()
     {
-        return await _context.JobCategories.ToListAsync();
+        return Ok(await _service.GetAllCategoriesAsync());
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<JobCategory>> GetCategory(int id)
     {
-        var Category = await _context.JobCategories.FindAsync(id);
+        var Category = await _service.GetCategoryByIdAsync(id);
 
         if (Category == null)
         {
@@ -50,15 +51,14 @@ public class CategoriesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(JobCategory), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<JobCategory>> CreateCategory([FromBody] DTOs.CreateCategoryDto dto)
+    public async Task<ActionResult<JobCategory>> CreateCategory([FromBody] CreateCategoryDto dto)
     {
-        var Category = new JobCategory
+        if (string.IsNullOrWhiteSpace(dto.CategoryName))
         {
-            CategoryName = dto.CategoryName
-        };
+            return BadRequest(new { message = "Category name is required." });
+        }
 
-        _context.JobCategories.Add(Category);
-        await _context.SaveChangesAsync();
+        var Category = await _service.CreateCategoryAsync(dto);
 
         return CreatedAtAction(nameof(GetCategory), new { id = Category.CategoryId }, Category);
     }
@@ -70,23 +70,20 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateCategory(int id, [FromBody] DTOs.UpdateCategoryDto dto)
+    public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto)
     {
         if (id != dto.CategoryId)
         {
             return BadRequest(new { message = "Category ID mismatch." });
         }
 
-        var existingCategory = await _context.JobCategories.FindAsync(id);
+        var existingCategory = await _service.GetCategoryByIdAsync(id);
         if (existingCategory == null)
         {
             return NotFound(new { message = $"Category with ID {id} not found." });
         }
 
-        // Update properties
-        existingCategory.CategoryName = dto.CategoryName;
-
-        await _context.SaveChangesAsync();
+        await _service.UpdateCategoryAsync(dto);
 
         return NoContent();
     }
@@ -99,14 +96,13 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCategory(int id)
     {
-        var Category = await _context.JobCategories.FindAsync(id);
+        var Category = await _service.GetCategoryByIdAsync(id);
         if (Category == null)
         {
             return NotFound(new { message = $"Category with ID {id} not found." });
         }
 
-        _context.JobCategories.Remove(Category);
-        await _context.SaveChangesAsync();
+        await _service.DeleteCategoryAsync(id);
 
         return NoContent();
     }
@@ -119,15 +115,13 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Job>>> GetCategoryJobs(int id)
     {
-        var Category = await _context.JobCategories.FindAsync(id);
+        var Category = await _service.GetCategoryByIdAsync(id);
         if (Category == null)
         {
             return NotFound(new { message = $"Category with ID {id} not found." });
         }
 
-        var jobs = await _context.Jobs
-            .Where(j => j.CategoryId == id)
-            .ToListAsync();
+        var jobs = await _service.GetCategoryJobsAsync(id);
 
         return Ok(jobs);
     }

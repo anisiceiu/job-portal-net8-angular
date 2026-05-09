@@ -1,7 +1,8 @@
+using JobPortal.Application.DTOs;
+using JobPortal.Application.Interfaces.Services;
+using JobPortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using JobPortalApi.Data;
-using JobPortalApi.Models;
 
 namespace JobPortalApi.Controllers;
 
@@ -9,11 +10,11 @@ namespace JobPortalApi.Controllers;
 [Route("api/[controller]")]
 public class CompaniesController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ICompanyService _service;
 
-    public CompaniesController(AppDbContext context)
+    public CompaniesController(ICompanyService service)
     {
-        _context = context;
+        _service = service;
     }
 
     /// <summary>
@@ -23,7 +24,9 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(typeof(IEnumerable<Company>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
     {
-        return await _context.Companies.ToListAsync();
+        return await _service.GetAllCompaniesAsync() is IEnumerable<Company> companies
+            ? Ok(companies)
+            : NotFound(new { message = "No companies found." });
     }
 
     /// <summary>
@@ -34,7 +37,7 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Company>> GetCompany(int id)
     {
-        var company = await _context.Companies.FindAsync(id);
+        var company = await _service.GetCompanyByIdAsync(id);
 
         if (company == null)
         {
@@ -50,23 +53,9 @@ public class CompaniesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Company), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Company>> CreateCompany([FromBody] DTOs.CreateCompanyDto dto)
+    public async Task<ActionResult<Company>> CreateCompany([FromBody] CreateCompanyDto dto)
     {
-        var company = new Company
-        {
-            CompanyName = dto.CompanyName,
-            Industry = dto.Industry,
-            Website = dto.Website,
-            LogoUrl = dto.LogoUrl,
-            Description = dto.Description,
-            Address = dto.Address,
-            City = dto.City,
-            Country = dto.Country,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        _context.Companies.Add(company);
-        await _context.SaveChangesAsync();
+        var company= await _service.CreateCompanyAsync(dto);
 
         return CreatedAtAction(nameof(GetCompany), new { id = company.CompanyId }, company);
     }
@@ -78,30 +67,21 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateCompany(int id, [FromBody] DTOs.UpdateCompanyDto dto)
+    public async Task<IActionResult> UpdateCompany(int id, [FromBody] UpdateCompanyDto dto)
     {
         if (id != dto.CompanyId)
         {
             return BadRequest(new { message = "Company ID mismatch." });
         }
 
-        var existingCompany = await _context.Companies.FindAsync(id);
+        var existingCompany = await _service.GetCompanyByIdAsync(id);
         if (existingCompany == null)
         {
             return NotFound(new { message = $"Company with ID {id} not found." });
         }
 
         // Update properties
-        existingCompany.CompanyName = dto.CompanyName;
-        existingCompany.Industry = dto.Industry;
-        existingCompany.Website = dto.Website;
-        existingCompany.LogoUrl = dto.LogoUrl;
-        existingCompany.Description = dto.Description;
-        existingCompany.Address = dto.Address;
-        existingCompany.City = dto.City;
-        existingCompany.Country = dto.Country;
-
-        await _context.SaveChangesAsync();
+        await _service.UpdateCompanyAsync(id, dto);
 
         return NoContent();
     }
@@ -114,14 +94,13 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCompany(int id)
     {
-        var company = await _context.Companies.FindAsync(id);
+        var company = await _service.GetCompanyByIdAsync(id);
         if (company == null)
         {
             return NotFound(new { message = $"Company with ID {id} not found." });
         }
 
-        _context.Companies.Remove(company);
-        await _context.SaveChangesAsync();
+        await _service.DeleteCompanyAsync(id);
 
         return NoContent();
     }
@@ -134,16 +113,13 @@ public class CompaniesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IEnumerable<Job>>> GetCompanyJobs(int id)
     {
-        var company = await _context.Companies.FindAsync(id);
+        var company = await _service.GetCompanyByIdAsync(id);
         if (company == null)
         {
             return NotFound(new { message = $"Company with ID {id} not found." });
         }
 
-        var jobs = await _context.Jobs
-            .Where(j => j.CompanyId == id)
-            .ToListAsync();
-
+        var jobs = await _service.GetJobsByCompanyIdAsync(id);
         return Ok(jobs);
     }
 }
