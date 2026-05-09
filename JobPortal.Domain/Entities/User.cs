@@ -1,6 +1,6 @@
 using System;
 
-namespace JobPortalApi.Models
+namespace JobPortal.Domain.Entities
 {
     public class User
     {

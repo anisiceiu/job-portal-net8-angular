@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace JobPortalApi.DTOs
+namespace JobPortal.Application.DTOs
 {
     public class CreateCompanyDto
     {

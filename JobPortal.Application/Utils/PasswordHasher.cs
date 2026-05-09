@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
-namespace JobPortalApi.Utils
+namespace JobPortal.Application.Utils
 {
     public static class PasswordHasher
     {

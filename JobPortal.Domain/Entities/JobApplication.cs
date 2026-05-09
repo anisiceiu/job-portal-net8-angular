@@ -1,6 +1,6 @@
-namespace JobPortalApi.Models;
+namespace JobPortal.Domain.Entities;
 
-public class Application
+public class JobApplication
 {
     public int ApplicationId { get; set; }
 

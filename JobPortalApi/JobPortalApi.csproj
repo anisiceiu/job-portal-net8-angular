@@ -15,4 +15,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JobPortal.Application\JobPortal.Application.csproj" />
+    <ProjectReference Include="..\JobPortal.Infrastructure\JobPortal.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

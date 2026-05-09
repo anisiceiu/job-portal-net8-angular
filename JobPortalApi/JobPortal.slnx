@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="../JobPortal.Application/JobPortal.Application.csproj" Id="45265829-fdb6-41e0-babf-8c9f64b2eb9c" />
+  <Project Path="../JobPortal.Domain/JobPortal.Domain.csproj" Id="51398401-988a-4a41-a10f-c40b2d01f9a6" />
+  <Project Path="../JobPortal.Infrastructure/JobPortal.Infrastructure.csproj" Id="85110b6d-635c-48a4-8c17-f8377a05c199" />
   <Project Path="JobPortalApi.csproj" />
 </Solution>

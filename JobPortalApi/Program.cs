@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using JobPortalApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using JobPortal.Infrastructure;
+using JobPortal.Application;
+using JobPortal.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,8 +38,10 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Configure DbContext with SQL Server
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -104,7 +108,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        var context = services.GetRequiredService<AppDbContext>();
+        var context = services.GetRequiredService<ApplicationDbContext>();
         context.Database.EnsureCreated();
     }
     catch (Exception ex)

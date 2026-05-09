@@ -1,4 +1,4 @@
-namespace JobPortalApi.DTOs
+namespace JobPortal.Application.DTOs
 {
     public class RegisterDto
     {

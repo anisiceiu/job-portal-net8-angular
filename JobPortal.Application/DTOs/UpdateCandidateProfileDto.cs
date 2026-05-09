@@ -1,10 +1,7 @@
-namespace JobPortalApi.Models;
+namespace JobPortal.Application.DTOs;
 
-public class CandidateProfile
+public class UpdateCandidateProfileDto
 {
-    public int CandidateProfileId { get; set; }
-    public int UserId { get; set; }
-
     public string? Headline { get; set; }
     public string? Summary { get; set; }
     public decimal? ExperienceYears { get; set; }
@@ -15,7 +12,4 @@ public class CandidateProfile
     public string? LinkedInUrl { get; set; }
     public string? GitHubUrl { get; set; }
     public string? ResumeUrl { get; set; }
-
-    // Navigation
-    public User? User { get; set; }
 }

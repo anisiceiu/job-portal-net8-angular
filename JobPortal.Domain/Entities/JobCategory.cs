@@ -1,4 +1,4 @@
-
+namespace JobPortal.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 public class JobCategory

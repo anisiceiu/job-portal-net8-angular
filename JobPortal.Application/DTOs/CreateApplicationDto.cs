@@ -1,4 +1,6 @@
-namespace JobPortalApi.DTOs;
+using Microsoft.AspNetCore.Http;
+
+namespace JobPortal.Application.DTOs;
 
 public class CreateApplicationDto
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace JobPortalApi.DTOs;
+namespace JobPortal.Application.DTOs;
 
 /// <summary>
 /// Data transfer object for creating a new job
