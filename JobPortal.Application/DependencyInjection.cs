@@ -13,6 +13,8 @@ namespace JobPortal.Application
             services.AddScoped<IJobCategoryService, JobCategoryService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<ICandidateProfileService, CandidateProfileService>();
+            services.AddScoped<IJobService, JobService>();
+
             return services;
         }
     }
